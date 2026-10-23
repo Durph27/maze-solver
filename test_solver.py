@@ -59,7 +59,6 @@ class TestMazeProject(unittest.TestCase):
         path = self.solver.solve_dfs(self.start, self.goal)
         self.assertValidPath(path, self.start, self.goal)
 
-    @unittest.skip("Uncomment when Teammate 3 finishes A*")
     def test_astar_valid_path(self):
         path = self.solver.solve_astar(self.start, self.goal)
         self.assertValidPath(path, self.start, self.goal)

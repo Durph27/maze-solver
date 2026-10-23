@@ -137,5 +137,31 @@ class MazeSolver:
     def solve_astar(
         self, start: tuple[int, int], goal: tuple[int, int]
     ) -> list[tuple[int, int]]:
-        """TODO (Teammate 3): Implement A* Search."""
-        raise NotImplementedError("Not implement solve_astar()")
+        #start/goal là tường
+        if self.maze.get(start) != MazeGenerator.EMPTY or self.maze.get(goal) != MazeGenerator.EMPTY:
+            return []
+
+        #heapq(f_score, ô)
+        frontier = []
+        heapq.heappush(frontier, (self.heuristic(start, goal), start))
+        came_from: dict[tuple[int, int], tuple[int, int]] = {}
+        g_score: dict[tuple[int, int], int] = {start: 0}
+        visited = set()
+
+        while frontier:
+            _, current = heapq.heappop(frontier)
+            if current == goal:
+                return self.reconstruct_path(came_from, current)
+
+            if current in visited:
+                continue
+            visited.add(current)
+
+            for neighbor in self.get_neighbors(current):
+                tentative_g = g_score[current] + 1
+                if tentative_g < g_score.get(neighbor, float('inf')):
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g
+                    f_score = tentative_g + self.heuristic(neighbor, goal)
+                    heapq.heappush(frontier, (f_score, neighbor))
+        return []
